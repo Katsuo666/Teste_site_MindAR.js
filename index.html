@@ -6,8 +6,23 @@
     <title>Teste MindAR - Bolsos</title>
 
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+    <script>
+      AFRAME.registerComponent('auto-center', {
+        init: function () {
+          this.el.addEventListener('model-loaded', (event) => {
+            const model = event.detail.model;
+            const box = new THREE.Box3().setFromObject(model);
+            const center = new THREE.Vector3();
+            box.getCenter(center);
+            
+            // Move a malha tridimensional interna para anular o desvio do pivot
+            model.position.sub(center);
+          });
+        }
+      });
+    </script>
   </head>
   <body>
     <a-scene 
@@ -24,14 +39,15 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-entity scale="1000 1000 1000" position="0 0 0.8" rotation="0 0 0">
-          <a-gltf-model 
-            src="#02_Bolsos" 
-            position="0 0 0" 
-            rotation="0 0 0">
-          </a-gltf-model>
-        </a-entity>
+        <a-gltf-model 
+          src="#02_Bolsos" 
+          auto-center
+          scale="150 150 150" 
+          position="0 0 0.1" 
+          rotation="0 0 0">
+        </a-gltf-model>
       </a-entity>
     </a-scene>
   </body>
+</html>
 </html>
